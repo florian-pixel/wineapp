@@ -15,10 +15,10 @@ exports.createUser = async (req, res, next) => {
 exports.readOne = async (req, res, next) => {
     const oneUser = await User.findOne({
         where: {
-            email: req.body.email
+            id: req.params.id
         }
     })
-    if (oneUser === null) {
+    if (!oneUser) {
         res.send("Utilisateur inexistant")
     } else {
         res.send(oneUser)

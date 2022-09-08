@@ -39,7 +39,7 @@ const userModel = {
     roles: {
         type: DataTypes.STRING,
         validate:{
-            isIn: [['admin', 'client', 'super admin']]
+            isIn: [['admin', 'client', 'superadmin']]
         },
         defaultValue: 'client',
         allowNull: true
