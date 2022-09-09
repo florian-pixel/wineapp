@@ -1,6 +1,6 @@
 const express = require('express')
 const db = require('./database/db')
-const router = require('./routes/User')
+const appRouter = require('./routes')
 
 const app = express()
 
@@ -14,5 +14,5 @@ db.sync()
 app.use(express.urlencoded({ extended: true }, { limit: '50mb' }))
 app.use(express.json({ limit: '50mb' }, { type: '*/*' }))
 
-app.use('/api', router)
-app.listen(4000)
+app.use('/api', appRouter)
+app.listen(process.env.PORT)

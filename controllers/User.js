@@ -1,63 +1,60 @@
 const User = require('../models/User')
-const dayjs = require('dayjs')
+
 
 exports.createUser = async (req, res, next) => {
     const { dateOfBirth } = req.body
-    console.log('params ', req.params)
-    const user = await User.create({
-        ...req.body
-        ,
-        dateOfBirth: new Date(dayjs(dateOfBirth, 'DD-MM-YYYY'))
-    })
-    res.send(user)
+    const user = await User
+        .create({
+            ...req.body
+        })
+        .catch(err => {throw new Error(er)})
+    return res.status(201).json(user)
 }
 
-exports.readOne = async (req, res, next) => {
-    const oneUser = await User.findOne({
+
+exports.readAllUser = async (req, res, next) => {
+    const users = await User.findAll()
+    return res.status(200).json(user)
+}
+
+
+exports.readOneUser = async (req, res, next) => {
+    const user = await User.findOne({
         where: {
             id: req.params.id
         }
     })
-    if (!oneUser) {
-        res.send("Utilisateur inexistant")
-    } else {
-        res.send(oneUser)
+    if (!user) {
+        return res.status(404).send(`This user does not exist in our database`)
     }
+    return res.status(200).json(user)
+
 }
 
-exports.findAllUser = async (req, res, next) => {
-    const allUser = await User.findAll()
-    res.send(allUser)
-}
-
-exports.deleteUser = async (req, res, next) => {
-    const stockSup = await User.destroy({
-        where: {
-            email: req.body.email
-        }
-    })
-    message = stockSup === 1 ? "ok ustilisateur supprimé" : "utilisateur non supprimé"
-    res.send(message)
-}
 
 exports.updateUser = async (req, res, next) => {
-    const { dateOfBirth } = req.body
-    const modify = await User.update({ ...req.body
-        ,dateOfBirth: new Date(dayjs(dateOfBirth, 'DD-MM-YYYY')) }, {
-        where: {
-          email: req.params.email
-        }
-    })
-    console.log(modify)
-    if(modify[0] === 1 ){
-        const oneUser = await User.findOne({
+    let user
+    await User
+        .update(req.body, {
             where: {
-                email: req.body.email
+                id: req.params.id
             }
         })
-        const message = "utilisateur modifié"
-        res.status(200).json({ message, data: oneUser })
-    }else{
-        res.status(500).send("utilisateur non modifié")
+        .catch(err => {throw new Error(err)})
+    return res.status(200).json({
+        success: true
+    })
+}
+
+
+
+exports.deleteUser = async (req, res, next) => {
+    const user = await User.findByPk(req.params.id)
+    if(!user) {
+       return res.status(404).send(` This user does not exist in our database `)
     }
+    await user.destroy()
+    return res.status(200).json({
+        success: true
+    })
 }
