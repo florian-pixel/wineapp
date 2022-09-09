@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon start index.js"
+    "dev": "nodemon -r dotenv/config index.js"
   },
   "author": "",
   "license": "ISC",
